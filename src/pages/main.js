@@ -45,6 +45,12 @@ const ModalAddNew = () => {
   const handleOnClose = () => {
     setIsOpen(false);
   };
+
+  const handleOnSave = () => {
+    console.log(state.value);
+    console.log(values);
+  };
+
   const options = [
     {value: "num1", label: "Number 1", disabled: false},
     {value: "num2", label: "Number 2", disabled: false},
@@ -79,7 +85,7 @@ const ModalAddNew = () => {
             <Button
               label="Save"
               variant="brand"
-              onClick={() => handleOnClose()}
+              onClick={() => handleOnSave()}
             />
           </div>
         }
