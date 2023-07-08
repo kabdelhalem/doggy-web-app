@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-doggyreact2-dev-110135-authRole",
+      "UnauthRoleArn": "arn:aws:iam::890817599110:role/amplify-doggyreact2-dev-110135-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::890817599110:role/amplify-doggyreact2-dev-110135-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-doggyreact2-dev-110135-deployment",
+      "UnauthRoleName": "amplify-doggyreact2-dev-110135-unauthRole",
+      "StackName": "amplify-doggyreact2-dev-110135",
+      "StackId": "arn:aws:cloudformation:us-east-1:890817599110:stack/amplify-doggyreact2-dev-110135/8fa5f9e0-ef43-11ed-93f1-128e267ad5a5",
+      "AmplifyAppId": "d3vq9agr13esep"
+    },
+    "categories": {
+      "auth": {
+        "doggyreact22a3c8629": {}
+      }
+    }
+  }
+}
