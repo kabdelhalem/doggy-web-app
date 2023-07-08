@@ -1,6 +1,7 @@
 import logo from "./logo.svg";
 import "./App.css";
-
+import MainPage from "./pages/main";
+import TimeLine from "./pages/timeline";
 import {Amplify} from "aws-amplify";
 
 import {withAuthenticator} from "@aws-amplify/ui-react";
@@ -12,10 +13,11 @@ Amplify.configure(awsExports);
 function App({signOut, user}) {
   return (
     <>
-      <h1>Hello {user.username}</h1>
+      <MainPage></MainPage>
       <button onClick={signOut}>Sign out</button>
     </>
   );
 }
 
-export default withAuthenticator(App);
+// export default withAuthenticator(App);
+export default App;
