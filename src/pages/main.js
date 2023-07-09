@@ -1,14 +1,19 @@
-import React, {useState} from "react";
-import MobileDatePicker from "./mobile_date_picker.js";
+import React, {useEffect, useState} from "react";
+// import MobileDatePicker from "./mobile_date_picker.js";
 import TimeLine from "./timeline.js";
 import {
   Button,
   DateTimePicker,
   Picklist,
-  PicklistOption,
+  Option,
   Modal,
   CheckboxGroup,
 } from "react-rainbow-components";
+import {getFamilies} from "../api/family.js";
+import {Auth, DataStore} from "aws-amplify";
+import {Families, User} from "../models/index.js";
+import Navbar from "./navbar.js";
+import MobileDatePickerTSX from "./mobile_date_picker.js";
 
 const textStyles = {
   textAlign: "center",
@@ -35,6 +40,9 @@ const ModalAddNew = () => {
     "es-ES": "Cancelar",
     "fr-Fr": "Annuler",
   };
+  const containerStyles = {
+    width: "200px",
+  };
 
   const [state, setState] = useState(initialState);
 
@@ -46,9 +54,20 @@ const ModalAddNew = () => {
     setIsOpen(false);
   };
 
-  const handleOnSave = () => {
+  const handleOnSave = async () => {
     console.log(state.value);
     console.log(values);
+
+    await DataStore.save(
+      new Event({
+        Num1: true,
+        Num2: true,
+        Description: "Lorem ipsum dolor sit amet",
+        Date: "Lorem ipsum dolor sit amet",
+        Pet: "/* Provide a Pet instance here */",
+        familiesID: "a3f4095e-39de-43d2-baf4-f8c16f0f6f4d",
+      })
+    );
   };
 
   const options = [
@@ -107,19 +126,91 @@ const ModalAddNew = () => {
           onChange={setValues}
           label="Checkbox Group Label"
           orientation="horizontal"
+          hideLabel
         />
+        <Picklist
+          style={containerStyles}
+          onChange={(value) => setState({value})}
+          value={state.value}
+          label="Select a Pet"
+        >
+          <Option name="option 1" label="Experimental Building" />
+          <Option name="option 2" label="Empire State" />
+          <Option name="option 3" label="Plaza" />
+          <Option name="option 4" label="Central Park" />
+        </Picklist>
       </Modal>
     </div>
   );
 };
 
 export default function MainPage() {
+  const [familyName, setFamilyName] = useState(null);
+
+  const [date, setDate] = useState(new Date());
+
+  useEffect(() => {
+    const retrieveEmail = async () => {
+      Auth.currentAuthenticatedUser()
+        .then((user) => {
+          // Access the user's email from the user object
+          const email = user.attributes.email;
+          console.log("User's email:", email);
+          queryUser(email);
+        })
+        .catch((error) => {
+          console.log("Error retrieving user:", error);
+        });
+    };
+    const queryUser = async (email) => {
+      try {
+        // Find the user with the target email address
+        const users = await DataStore.query(User);
+
+        console.log(users.filter((u) => u.Email === email)[0]);
+
+        if (users.filter((u) => u.Email === email).length === 0) {
+          return;
+        } else {
+          queryFamily(users.filter((u) => u.Email === email)[0]);
+        }
+      } catch (error) {
+        console.error("Error querying users:", error);
+      }
+    };
+
+    const queryFamily = async (user) => {
+      try {
+        const families = await DataStore.query(Families, user.familiesID);
+
+        // Log the families that include the user
+        console.log("Families that include the user:", families);
+        if (families) {
+          setFamilyName(families.Family_Name);
+        }
+      } catch (error) {
+        console.error("Error querying families:", error);
+      }
+    };
+
+    retrieveEmail();
+  }, []);
+
   return (
     <>
-      <div className="flex flex-col items-center justify-center pt-10 mx-10">
-        <MobileDatePicker />
-        <TimeLine></TimeLine>
-        <ModalAddNew />
+      <Navbar></Navbar>
+      <div className="overflow-auto">
+        <div className="flex flex-col items-center justify-center p-10 mx-10 w-screen">
+          <div className="p-4">
+            <div>{familyName} Family</div>
+            <div>{date.toString()}</div>
+            {/* <MobileDatePicker setDate={setDate} /> */}
+            <MobileDatePickerTSX></MobileDatePickerTSX>
+            <TimeLine date={date} />
+
+            <ModalAddNew />
+          </div>
+        </div>
       </div>
     </>
   );

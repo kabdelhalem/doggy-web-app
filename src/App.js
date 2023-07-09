@@ -9,31 +9,31 @@ import "@aws-amplify/ui-react/styles.css";
 
 import awsExports from "./aws-exports";
 import {useEffect, useState} from "react";
+import Decider from "./pages/decider";
+import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
+import JoinFamily from "./pages/joinFamily";
+import CreateFamily from "./pages/createFamily";
+import HasFamily from "./pages/hasFamily";
+import {Wrapper} from "./pages/wrapper";
 Amplify.configure(awsExports);
 
 function App({signOut, user}) {
-  const [email, setEmail] = useState(null);
-
-  useEffect(() => {
-    // Call this function inside an effect or any other appropriate place in your component
-
-    // Retrieve the current authenticated user
-    Auth.currentAuthenticatedUser()
-      .then((user) => {
-        // Access the user's email from the user object
-        const email = user.attributes.email;
-        console.log("User's email:", email);
-        setEmail(email);
-      })
-      .catch((error) => {
-        console.log("Error retrieving user:", error);
-      });
-  }, []);
-
   return (
     <>
-      <MainPage></MainPage>
-      <button onClick={signOut}>Sign out</button>
+      <Wrapper>
+        <Router>
+          <Routes>
+            <Route element={<Decider />}>
+              <Route path="/" element={<MainPage />} />
+            </Route>
+            <Route element={<HasFamily />}>
+              <Route path="/getstarted/join" element={<JoinFamily />} />
+              <Route path="/getstarted/create" element={<CreateFamily />} />
+            </Route>
+          </Routes>
+        </Router>
+        {/* <button onClick={signOut}>Sign out</button> */}
+      </Wrapper>
     </>
   );
 }

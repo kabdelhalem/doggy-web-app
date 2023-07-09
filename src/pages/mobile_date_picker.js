@@ -19,11 +19,11 @@ const selectStyles = {
   width: "8rem",
 };
 
-const MobileDatePicker = () => {
+const MobileDatePicker = (props) => {
   const [state, setState] = useState(initialState);
 
   return (
-    <div>
+    <div className="">
       <div className="rainbow-align-content_center rainbow-m-vertical_large rainbow-p-horizontal_small rainbow-m_auto">
         <Card
           style={calendarContainerStyles}
@@ -34,6 +34,7 @@ const MobileDatePicker = () => {
             locale={state.locale.name}
             value={state.date}
             onChange={(value) => {
+              props.setDate(value);
               setState({...state, date: value});
               console.log(value);
             }}
