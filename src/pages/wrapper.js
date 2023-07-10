@@ -2,7 +2,6 @@ import {Auth, DataStore} from "aws-amplify";
 import React, {createContext, useEffect, useState} from "react";
 import {User, Families} from "../models";
 import MainPage from "./main";
-import {Outlet} from "react-router-dom";
 import JoinFamily from "./joinFamily";
 
 const WrapperContext = createContext();
