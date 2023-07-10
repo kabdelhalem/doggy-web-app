@@ -16,7 +16,7 @@ const NotFound = () => {
                 The page you’re looking for doesn’t exist.
               </p>
               <a
-                to="/"
+                href="/"
                 className="px-5 py-2 rounded-md text-blue-100 bg-blue-600 hover:bg-blue-700"
               >
                 Go home
