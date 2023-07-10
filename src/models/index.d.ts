@@ -45,7 +45,6 @@ type EagerEvent = {
   readonly Num1?: boolean | null;
   readonly Num2?: boolean | null;
   readonly Description?: string | null;
-  readonly Date?: string | null;
   readonly Pet?: Pet | null;
   readonly familiesID: string;
   readonly createdAt?: string | null;
@@ -62,7 +61,6 @@ type LazyEvent = {
   readonly Num1?: boolean | null;
   readonly Num2?: boolean | null;
   readonly Description?: string | null;
-  readonly Date?: string | null;
   readonly Pet: AsyncItem<Pet | undefined>;
   readonly familiesID: string;
   readonly createdAt?: string | null;

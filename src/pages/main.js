@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 // import MobileDatePicker from "./mobile_date_picker.js";
 import TimeLine from "./timeline.js";
 import {
@@ -6,142 +6,19 @@ import {
   DateTimePicker,
   Picklist,
   Option,
-  Modal,
   CheckboxGroup,
 } from "react-rainbow-components";
 import {getFamilies} from "../api/family.js";
 import {Auth, DataStore} from "aws-amplify";
-import {Families, User} from "../models/index.js";
+import {Families, Pet, User, Event} from "../models/index.js";
 import Navbar from "./navbar.js";
-import MobileDatePickerTSX from "./mobile_date_picker.js";
+import MobileDatePickerTSX from "./mobile_date_pickertsx.js";
+import {WrapperContext} from "./wrapper.js";
 
 const textStyles = {
   textAlign: "center",
   fontSize: 15,
   padding: "0 16px",
-};
-
-const ModalAddNew = () => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const initialState = {
-    value: new Date(),
-    locale: {name: "en-US", label: "English (US)"},
-  };
-
-  const okButtonLocalizedLabel = {
-    "en-US": "OK",
-    "es-ES": "Aceptar",
-    "fr-Fr": "D'accord",
-  };
-
-  const cancelButtonLocalizedLabel = {
-    "en-US": "Cancel",
-    "es-ES": "Cancelar",
-    "fr-Fr": "Annuler",
-  };
-  const containerStyles = {
-    width: "200px",
-  };
-
-  const [state, setState] = useState(initialState);
-
-  const handleOnClick = () => {
-    setIsOpen(true);
-  };
-
-  const handleOnClose = () => {
-    setIsOpen(false);
-  };
-
-  const handleOnSave = async () => {
-    console.log(state.value);
-    console.log(values);
-
-    await DataStore.save(
-      new Event({
-        Num1: true,
-        Num2: true,
-        Description: "Lorem ipsum dolor sit amet",
-        Date: "Lorem ipsum dolor sit amet",
-        Pet: "/* Provide a Pet instance here */",
-        familiesID: "a3f4095e-39de-43d2-baf4-f8c16f0f6f4d",
-      })
-    );
-  };
-
-  const options = [
-    {value: "num1", label: "Number 1", disabled: false},
-    {value: "num2", label: "Number 2", disabled: false},
-  ];
-
-  const [values, setValues] = useState([]);
-
-  return (
-    <div className="rainbow-m-bottom_xx-large rainbow-p-bottom_xx-large">
-      <div className="rainbow-p-bottom_xx-large rainbow-m-bottom_xx-large">
-        <Button
-          id="button-2"
-          variant="brand"
-          className="rainbow-m-around_medium"
-          label="Add New"
-          onClick={handleOnClick}
-        />
-      </div>
-      <Modal
-        id="modal-2"
-        isOpen={isOpen}
-        onRequestClose={handleOnClose}
-        title="Modal Header"
-        footer={
-          <div className="rainbow-flex rainbow-justify_end">
-            <Button
-              className="rainbow-m-right_large"
-              label="Cancel"
-              variant="neutral"
-              onClick={() => handleOnClose()}
-            />
-            <Button
-              label="Save"
-              variant="brand"
-              onClick={() => handleOnSave()}
-            />
-          </div>
-        }
-      >
-        <DateTimePicker
-          id="datetimepicker-1"
-          label="DateTimePicker label"
-          value={state.value}
-          onChange={(value) => setState({...state, value})}
-          formatStyle="large"
-          locale={state.locale.name}
-          okLabel={okButtonLocalizedLabel[state.locale.name]}
-          cancelLabel={cancelButtonLocalizedLabel[state.locale.name]}
-        />
-        <CheckboxGroup
-          id="checkbox-group-1"
-          options={options}
-          value={values}
-          onChange={setValues}
-          label="Checkbox Group Label"
-          orientation="horizontal"
-          hideLabel
-        />
-        <Picklist
-          style={containerStyles}
-          onChange={(value) => setState({value})}
-          value={state.value}
-          label="Select a Pet"
-        >
-          <Option name="option 1" label="Experimental Building" />
-          <Option name="option 2" label="Empire State" />
-          <Option name="option 3" label="Plaza" />
-          <Option name="option 4" label="Central Park" />
-        </Picklist>
-      </Modal>
-    </div>
-  );
 };
 
 export default function MainPage() {
@@ -196,22 +73,238 @@ export default function MainPage() {
     retrieveEmail();
   }, []);
 
+  const [modal, setModal] = useState(false);
+
   return (
     <>
       <Navbar></Navbar>
-      <div className="overflow-auto">
-        <div className="flex flex-col items-center justify-center p-10 mx-10 w-screen">
-          <div className="p-4">
-            <div>{familyName} Family</div>
-            <div>{date.toString()}</div>
-            {/* <MobileDatePicker setDate={setDate} /> */}
-            <MobileDatePickerTSX></MobileDatePickerTSX>
-            <TimeLine date={date} />
-
-            <ModalAddNew />
+      <div className="">
+        <div className="flex flex-col items-center justify-center p-10 mx-auto w-screen">
+          <div className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
+            {familyName} Family
           </div>
+          <div>{date.toString()}</div>
+          <MobileDatePickerTSX></MobileDatePickerTSX>
+          <TimeLine date={date} />
+
+          <button
+            data-modal-target="defaultModal"
+            data-modal-toggle="defaultModal"
+            class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            type="button"
+            onClick={() => setModal(!modal)}
+          >
+            Add New
+          </button>
+          {!modal ? null : <Modal setModal={setModal}></Modal>}
         </div>
       </div>
     </>
   );
 }
+const Modal = (props) => {
+  const {family, loading} = useContext(WrapperContext);
+
+  const [num1, setNum1] = useState(false);
+  const [num2, setNum2] = useState(false);
+  const [desc, setDesc] = useState(null);
+
+  const [pets, setPets] = useState(null);
+  const [selectedPet, setSelectedPet] = useState(null);
+
+  const [showDropdown, setShowDropdown] = useState(true);
+
+  useEffect(() => {
+    const fetchPets = async () => {
+      const familyId = family.id;
+
+      const pets = await DataStore.query(Pet, (u) => u.familiesID.eq(familyId));
+      setPets(pets);
+    };
+
+    if (!loading) {
+      fetchPets();
+    }
+  }, [loading]);
+
+  const handleSubmit = async () => {
+    const fetchedPet = await DataStore.query(Pet, (p) =>
+      p.id.eq(selectedPet.id)
+    );
+    console.log("fetched pet", fetchedPet[0]);
+
+    try {
+      await DataStore.save(
+        // console.log(
+        new Event({
+          Num1: num1,
+          Num2: num2,
+          Description: desc,
+          Pet: fetchedPet[0],
+          familiesID: family.id,
+        })
+      );
+      window.location.reload();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  return (
+    <div
+      id="defaultModal"
+      tabindex="-1"
+      aria-hidden="true"
+      class="flex justify-center items-center w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full"
+    >
+      <div class="relative w-full max-w-2xl max-h-full">
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+          <div class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+              Add New
+            </h3>
+            <button
+              type="button"
+              class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+              data-modal-hide="defaultModal"
+              onClick={() => props.setModal(false)}
+            >
+              <svg
+                class="w-3 h-3"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 14 14"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                />
+              </svg>
+              <span class="sr-only">Close modal</span>
+            </button>
+          </div>
+          <div class="p-6 space-y-6">
+            <div class="flex items-center mb-4">
+              <input
+                id="default-checkbox"
+                type="checkbox"
+                value={num1}
+                onClick={() => setNum1(!num1)}
+                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+              />
+              <label
+                for="default-checkbox"
+                class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+              >
+                Number 1
+              </label>
+            </div>
+            <div class="flex items-center mb-4">
+              <input
+                id="default-checkbox"
+                type="checkbox"
+                value={num2}
+                onClick={() => setNum1(!num2)}
+                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+              />
+              <label
+                for="default-checkbox"
+                class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+              >
+                Number 2
+              </label>
+            </div>
+            <div class="flex items-center mb-4">
+              <textarea
+                id="message"
+                rows="4"
+                class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="Write a Description"
+                onChange={(e) => setDesc(e.target.value)}
+              ></textarea>
+            </div>
+            <div class="flex items-center mb-4">
+              <button
+                onClick={() => setShowDropdown(!showDropdown)}
+                id="dropdownDefaultButton"
+                data-dropdown-toggle="dropdown"
+                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                type="button"
+              >
+                {!selectedPet ? `Select a Pet${" "}` : selectedPet.Name}
+                <svg
+                  class="w-2.5 h-2.5 ml-2.5"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 10 6"
+                >
+                  <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="m1 1 4 4 4-4"
+                  />
+                </svg>
+              </button>
+              <div
+                id="dropdown"
+                class={
+                  showDropdown
+                    ? "hidden"
+                    : "z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
+                }
+              >
+                <ul
+                  class="py-2 text-sm text-gray-700 dark:text-gray-200"
+                  aria-labelledby="dropdownDefaultButton"
+                >
+                  {!pets
+                    ? null
+                    : pets.map((pet) => (
+                        <li
+                          onClick={() => {
+                            setSelectedPet(pet);
+                            setShowDropdown(true);
+                          }}
+                        >
+                          <div class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                            {pet.Name}
+                          </div>
+                        </li>
+                      ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
+            <button
+              onClick={() => {
+                handleSubmit();
+                // props.setModal(false);
+              }}
+              data-modal-hide="defaultModal"
+              type="button"
+              class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            >
+              Submit
+            </button>
+            <button
+              onClick={() => props.setModal(false)}
+              data-modal-hide="defaultModal"
+              type="button"
+              class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};

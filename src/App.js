@@ -15,6 +15,7 @@ import JoinFamily from "./pages/joinFamily";
 import CreateFamily from "./pages/createFamily";
 import HasFamily from "./pages/hasFamily";
 import {Wrapper} from "./pages/wrapper";
+import Settings from "./pages/settings";
 Amplify.configure(awsExports);
 
 function App({signOut, user}) {
@@ -25,6 +26,7 @@ function App({signOut, user}) {
           <Routes>
             <Route element={<Decider />}>
               <Route path="/" element={<MainPage />} />
+              <Route path="/settings" element={<Settings />} />
             </Route>
             <Route element={<HasFamily />}>
               <Route path="/getstarted/join" element={<JoinFamily />} />

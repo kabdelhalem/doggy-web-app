@@ -7,13 +7,9 @@ const Navbar = () => {
     <nav class="border-gray-200 bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
       <div class="flex flex-wrap items-center justify-between mx-auto p-4">
         <a href="#" class="flex items-center">
-          <img
-            src="https://flowbite.com/docs/images/logo.svg"
-            class="h-8 mr-3"
-            alt="Flowbite Logo"
-          />
+          <img src="/images/love.png" class="h-8 mr-3" alt="Flowbite Logo" />
           <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
-            Flowbite
+            Milou
           </span>
         </a>
         <button
@@ -45,7 +41,7 @@ const Navbar = () => {
           <ul class="flex flex-col font-medium mt-4 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
             <li>
               <a
-                href="#"
+                href="/"
                 class="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded dark:bg-blue-600"
                 aria-current="page"
               >
@@ -54,26 +50,10 @@ const Navbar = () => {
             </li>
             <li>
               <a
-                href="#"
+                href="/settings"
                 class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
               >
-                Services
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white"
-              >
-                Pricing
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-              >
-                Contact
+                Settings
               </a>
             </li>
           </ul>
