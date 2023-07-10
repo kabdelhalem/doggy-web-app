@@ -17,6 +17,7 @@ import HasFamily from "./pages/hasFamily";
 import {Wrapper} from "./pages/wrapper";
 import Settings from "./pages/settings";
 import Welcome from "./pages/welcome";
+import FeedbackPage from "./pages/feedback";
 Amplify.configure(awsconfig);
 
 function App({signOut, user}) {
@@ -28,6 +29,7 @@ function App({signOut, user}) {
             <Route element={<Decider />}>
               <Route path="/" element={<MainPage />} />
               <Route path="/settings" element={<Settings />} />
+              <Route path="/feedback" element={<FeedbackPage />} />
             </Route>
             <Route element={<HasFamily />}>
               <Route path="/getstarted" element={<Welcome />} />

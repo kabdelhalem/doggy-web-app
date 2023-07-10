@@ -5,5 +5,7 @@
  **************************************************************************/
 
 export { default as studioTheme } from "./studioTheme";
+export { default as FeedbackCreateForm } from "./FeedbackCreateForm";
+export { default as FeedbackUpdateForm } from "./FeedbackUpdateForm";
 export { default as FamiliesCreateForm } from "./FamiliesCreateForm";
 export { default as FamiliesUpdateForm } from "./FamiliesUpdateForm";

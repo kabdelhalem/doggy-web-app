@@ -6,6 +6,38 @@ import { LazyLoading, LazyLoadingDisabled, AsyncItem, AsyncCollection } from "@a
 
 
 
+type EagerFeedback = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Feedback, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly Name?: string | null;
+  readonly Description?: string | null;
+  readonly Email?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyFeedback = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Feedback, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly Name?: string | null;
+  readonly Description?: string | null;
+  readonly Email?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type Feedback = LazyLoading extends LazyLoadingDisabled ? EagerFeedback : LazyFeedback
+
+export declare const Feedback: (new (init: ModelInit<Feedback>) => Feedback) & {
+  copyOf(source: Feedback, mutator: (draft: MutableModel<Feedback>) => MutableModel<Feedback> | void): Feedback;
+}
+
 type EagerPet = {
   readonly [__modelMeta__]: {
     identifier: ManagedIdentifier<Pet, 'id'>;

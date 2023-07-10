@@ -14,6 +14,7 @@ import {Families, Pet, User, Event} from "../models/index.js";
 import Navbar from "./navbar.js";
 import MobileDatePickerTSX from "./mobile_date_pickertsx.js";
 import {WrapperContext} from "./wrapper.js";
+import Banner from "./banner.js";
 
 const textStyles = {
   textAlign: "center",
@@ -78,6 +79,7 @@ export default function MainPage() {
   return (
     <>
       <Navbar></Navbar>
+      <Banner />
       <div className="">
         <div className="flex flex-col items-center justify-center p-10 mx-auto w-screen">
           <div className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
