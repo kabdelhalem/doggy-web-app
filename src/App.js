@@ -18,6 +18,7 @@ import {Wrapper} from "./pages/wrapper";
 import Settings from "./pages/settings";
 import Welcome from "./pages/welcome";
 import FeedbackPage from "./pages/feedback";
+import NotFound from "./pages/nofound";
 Amplify.configure(awsconfig);
 
 function App({signOut, user}) {
@@ -36,6 +37,7 @@ function App({signOut, user}) {
               <Route path="/getstarted/join" element={<JoinFamily />} />
               <Route path="/getstarted/create" element={<CreateFamily />} />
             </Route>
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </Router>
         {/* <button onClick={signOut}>Sign out</button> */}
