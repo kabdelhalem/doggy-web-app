@@ -26,4 +26,4 @@ type Families @model @auth(rules: [{allow: public}]) {
   Users: [User] @hasMany(indexName: "byFamilies", fields: ["id"])
   Pets: [Pet] @hasMany(indexName: "byFamilies", fields: ["id"])
   Events: [Event] @hasMany(indexName: "byFamilies", fields: ["id"])
-}
+} 
