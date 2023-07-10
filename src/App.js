@@ -2,12 +2,12 @@ import logo from "./logo.svg";
 import "./App.css";
 import MainPage from "./pages/main";
 import TimeLine from "./pages/timeline";
-import {Amplify, Auth} from "aws-amplify";
+import {Amplify, API, graphqlOperation} from "aws-amplify";
 
 import {withAuthenticator} from "@aws-amplify/ui-react";
 import "@aws-amplify/ui-react/styles.css";
 
-import awsExports from "./aws-exports";
+import awsconfig from "./aws-exports";
 import {useEffect, useState} from "react";
 import Decider from "./pages/decider";
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
@@ -17,7 +17,7 @@ import HasFamily from "./pages/hasFamily";
 import {Wrapper} from "./pages/wrapper";
 import Settings from "./pages/settings";
 import Welcome from "./pages/welcome";
-Amplify.configure(awsExports);
+Amplify.configure(awsconfig);
 
 function App({signOut, user}) {
   return (

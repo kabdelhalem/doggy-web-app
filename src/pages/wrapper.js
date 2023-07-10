@@ -1,8 +1,9 @@
-import {Auth, DataStore} from "aws-amplify";
+import {API, Auth, DataStore} from "aws-amplify";
 import React, {createContext, useEffect, useState} from "react";
 import {User, Families} from "../models";
 import MainPage from "./main";
 import JoinFamily from "./joinFamily";
+import {getUser, listUsers} from "../graphql/queries";
 
 const WrapperContext = createContext();
 
@@ -22,7 +23,6 @@ const Wrapper = (props) => {
         .then((user) => {
           // Access the user's email from the user object
           const email = user.attributes.email;
-          console.log("User's email:", email);
           queryUser(email);
         })
         .catch((error) => {
@@ -37,7 +37,9 @@ const Wrapper = (props) => {
     const queryUser = async (email) => {
       try {
         // Find the user with the target email address
+        // Get a specific item
         const users = await DataStore.query(User);
+        console.log(users);
 
         console.log(users.filter((u) => u.Email === email)[0]);
 
@@ -47,6 +49,7 @@ const Wrapper = (props) => {
           setLoading(false);
           return;
         } else {
+          console.log("user found");
           queryFamily(users.filter((u) => u.Email === email)[0]);
           setUser(users.filter((u) => u.Email === email)[0]);
         }
@@ -77,7 +80,7 @@ const Wrapper = (props) => {
   }, []);
 
   return (
-    <WrapperContext.Provider value={{user, family, loading}}>
+    <WrapperContext.Provider value={{user, family, hasFamily, loading}}>
       {props.children}
     </WrapperContext.Provider>
   );

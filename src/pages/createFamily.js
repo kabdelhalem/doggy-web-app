@@ -6,7 +6,7 @@ import {Families, User} from "../models";
 const CreateFamily = () => {
   const navigate = useNavigate();
 
-  const handleCreateFamilyClick = () => {
+  const handleJoinFamilyClick = () => {
     navigate("/getstarted/join"); // Navigate to the specified route
   };
 
@@ -47,7 +47,7 @@ const CreateFamily = () => {
         Email: email,
       })
     );
-    // navigate("/");
+    navigate("/");
   };
 
   return (
@@ -107,7 +107,7 @@ const CreateFamily = () => {
             <button
               formNoValidate
               type="button"
-              onClick={() => handleCreateFamilyClick()} // Handle button click to navigate
+              onClick={() => handleJoinFamilyClick()} // Handle button click to navigate
               class="text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             >
               Join a Family
