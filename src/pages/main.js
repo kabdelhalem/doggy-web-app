@@ -83,8 +83,10 @@ export default function MainPage() {
           <div className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
             {familyName} Family
           </div>
-          <div>{date.toString()}</div>
-          <MobileDatePickerTSX></MobileDatePickerTSX>
+          <div className="md:w-2/5">
+            <MobileDatePickerTSX setDate={setDate}></MobileDatePickerTSX>
+          </div>
+
           <TimeLine date={date} />
 
           <button

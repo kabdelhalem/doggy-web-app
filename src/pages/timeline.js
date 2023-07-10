@@ -19,13 +19,49 @@ const TimeLine = (props) => {
     const queryEvents = async () => {
       const familyId = family.id;
 
+      const currentDate = new Date(date);
+      console.log("selected date = ", currentDate);
+
       const events = await DataStore.query(Event, (e) =>
-        e.familiesID.eq(familyId)
+        e.and((e) => [
+          e.familiesID.eq(familyId),
+          // e.updatedAt.contains(localDate.split("T")[0]),
+        ])
       );
 
+      const filteredEvents = events.filter((obj) => {
+        const localDate = new Date(obj.createdAt)
+          .toLocaleDateString()
+          .split("T")[0];
+
+        console.log(localDate);
+        return (
+          localDate ===
+          currentDate.toLocaleDateString("en-US", {
+            month: "numeric",
+            day: "numeric",
+            year: "numeric",
+          })
+        );
+      });
+
+      // const events = await DataStore.query(Event, (e) => {
+      //   const localDate = new Date(date); // Assuming 'date' is in the format '2023-07-09'
+
+      //   return e.and(e.familiesID.eq(familyId), (e) => {
+      //     const updatedAtDate = new Date(e.updatedAt);
+      //     const localUpdatedAtDate = new Date(
+      //       updatedAtDate.getTime() - updatedAtDate.getTimezoneOffset() * 60000
+      //     );
+      //     return e.updatedAt.contains(
+      //       localUpdatedAtDate.toISOString().split("T")[0]
+      //     );
+      //   });
+      // });
+
       // Log the events
-      console.log("Events in the family:", events);
-      setEvents(events);
+      console.log("Events in the family:", filteredEvents);
+      setEvents(filteredEvents);
 
       const petIds = Array.from(
         new Set(events.map((event) => event.eventPetId))
@@ -40,7 +76,7 @@ const TimeLine = (props) => {
     if (!loading) {
       queryEvents();
     }
-  }, [loading]);
+  }, [loading, date]);
 
   return (
     <ol class="relative border-l border-gray-200 dark:border-gray-700">
