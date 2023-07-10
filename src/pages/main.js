@@ -121,6 +121,8 @@ const Modal = (props) => {
       const familyId = family.id;
 
       const pets = await DataStore.query(Pet, (u) => u.familiesID.eq(familyId));
+      console.log("pets", pets);
+      console.log("is empty? ", pets.length === 0);
       setPets(pets);
     };
 
@@ -189,113 +191,136 @@ const Modal = (props) => {
               <span class="sr-only">Close modal</span>
             </button>
           </div>
-          <div class="p-6 space-y-6">
-            <div class="flex items-center mb-4">
-              <input
-                id="default-checkbox"
-                type="checkbox"
-                value={num1}
-                onClick={() => setNum1(!num1)}
-                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-              />
-              <label
-                for="default-checkbox"
-                class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-              >
-                Number 1
-              </label>
-            </div>
-            <div class="flex items-center mb-4">
-              <input
-                id="default-checkbox"
-                type="checkbox"
-                value={num2}
-                onClick={() => setNum1(!num2)}
-                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-              />
-              <label
-                for="default-checkbox"
-                class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-              >
-                Number 2
-              </label>
-            </div>
-            <div class="flex items-center mb-4">
-              <textarea
-                id="message"
-                rows="4"
-                class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Write a Description"
-                onChange={(e) => setDesc(e.target.value)}
-              ></textarea>
-            </div>
-            <div class="flex items-center mb-4">
-              <button
-                onClick={() => setShowDropdown(!showDropdown)}
-                id="dropdownDefaultButton"
-                data-dropdown-toggle="dropdown"
-                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                type="button"
-              >
-                {!selectedPet ? `Select a Pet${" "}` : selectedPet.Name}
-                <svg
-                  class="w-2.5 h-2.5 ml-2.5"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 10 6"
+          {!pets ? null : pets.length !== 0 ? (
+            <div class="p-6 space-y-6">
+              <div class="flex items-center mb-4">
+                <input
+                  id="default-checkbox"
+                  type="checkbox"
+                  value={num1}
+                  onClick={() => setNum1(!num1)}
+                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                />
+                <label
+                  for="default-checkbox"
+                  class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                 >
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="m1 1 4 4 4-4"
-                  />
-                </svg>
-              </button>
-              <div
-                id="dropdown"
-                class={
-                  showDropdown
-                    ? "hidden"
-                    : "z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
-                }
-              >
-                <ul
-                  class="py-2 text-sm text-gray-700 dark:text-gray-200"
-                  aria-labelledby="dropdownDefaultButton"
+                  Number 1
+                </label>
+              </div>
+              <div class="flex items-center mb-4">
+                <input
+                  id="default-checkbox"
+                  type="checkbox"
+                  value={num2}
+                  onClick={() => setNum1(!num2)}
+                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                />
+                <label
+                  for="default-checkbox"
+                  class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                 >
-                  {!pets
-                    ? null
-                    : pets.map((pet) => (
-                        <li
-                          onClick={() => {
-                            setSelectedPet(pet);
-                            setShowDropdown(true);
-                          }}
-                        >
-                          <div class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                            {pet.Name}
-                          </div>
-                        </li>
-                      ))}
-                </ul>
+                  Number 2
+                </label>
+              </div>
+              <div class="flex items-center mb-4">
+                <textarea
+                  id="message"
+                  rows="4"
+                  class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="Write a Description"
+                  onChange={(e) => setDesc(e.target.value)}
+                ></textarea>
+              </div>
+              <div class="flex items-center mb-4">
+                <button
+                  onClick={() => setShowDropdown(!showDropdown)}
+                  id="dropdownDefaultButton"
+                  data-dropdown-toggle="dropdown"
+                  class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                  type="button"
+                >
+                  {!selectedPet ? `Select a Pet${" "}` : selectedPet.Name}
+                  <svg
+                    class="w-2.5 h-2.5 ml-2.5"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 10 6"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="m1 1 4 4 4-4"
+                    />
+                  </svg>
+                </button>
+                <div
+                  id="dropdown"
+                  class={
+                    showDropdown
+                      ? "hidden"
+                      : "z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
+                  }
+                >
+                  <ul
+                    class="py-2 text-sm text-gray-700 dark:text-gray-200"
+                    aria-labelledby="dropdownDefaultButton"
+                  >
+                    {!pets
+                      ? null
+                      : pets.map((pet) => (
+                          <li
+                            onClick={() => {
+                              setSelectedPet(pet);
+                              setShowDropdown(true);
+                            }}
+                          >
+                            <div class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                              {pet.Name}
+                            </div>
+                          </li>
+                        ))}
+                  </ul>
+                </div>
               </div>
             </div>
-          </div>
+          ) : (
+            <div class="p-6 space-y-6">
+              <div class="flex items-center mb-4">
+                <div className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                  No pets found! Please create a pet in settings
+                </div>
+              </div>
+            </div>
+          )}
           <div class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
-            <button
-              onClick={() => {
-                handleSubmit();
-                // props.setModal(false);
-              }}
-              data-modal-hide="defaultModal"
-              type="button"
-              class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            >
-              Submit
-            </button>
+            {!pets ? null : pets.length !== 0 ? (
+              <button
+                onClick={() => {
+                  handleSubmit();
+                  // props.setModal(false);
+                }}
+                data-modal-hide="defaultModal"
+                type="button"
+                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              >
+                Submit
+              </button>
+            ) : (
+              <button
+                onClick={() => {
+                  // props.setModal(false);
+                }}
+                data-modal-hide="defaultModal"
+                type="button"
+                class="text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
+              >
+                Submit
+              </button>
+            )}
             <button
               onClick={() => props.setModal(false)}
               data-modal-hide="defaultModal"
