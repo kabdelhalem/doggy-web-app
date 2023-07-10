@@ -2,6 +2,8 @@
 
 Milou is a web app that allows you to track when you take your dog out and whether they went number one or two. It provides a simple interface for dog owners to keep a log of their dog's bathroom activities.
 
+Check it out at [Milou](https://www.milouapp.com)
+
 ## Features
 
 - Log dog walks: Record the date and time when you take your dog out for a walk.
