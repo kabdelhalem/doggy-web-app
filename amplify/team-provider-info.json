@@ -14,6 +14,9 @@
     "categories": {
       "auth": {
         "doggywebapp2b50120d": {}
+      },
+      "api": {
+        "doggywebapp": {}
       }
     }
   }
